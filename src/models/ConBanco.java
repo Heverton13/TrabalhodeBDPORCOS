@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 public class ConBanco {
     private Connection connection;
-    private String url = "jdbc:postgresql://localhost:5432/sistemas_porcos";
+    private String url = "jdbc:postgresql://localhost:5433/sistemas_porcos"; // 5432 usar esse na escola CVT
     private String user = "postgres";
     private String password = "postgre";
     
@@ -74,7 +74,7 @@ public class ConBanco {
             ResultSet rs = pst.executeQuery();
             
         while (rs.next()){
-            System.out.println(rs.getInt(1) + " - " + rs.getString(2)+ " Data de Nascimento: " + rs.getString(3));
+            System.out.println("Porco - ID:" + rs.getInt(1) + " - " + rs.getString(2)+ " Data de Nascimento: " + rs.getString(3));
         } 
             
         } catch (SQLException ex) {
@@ -123,7 +123,7 @@ public class ConBanco {
             ResultSet rs = pst.executeQuery();
             
         while (rs.next()){
-            System.out.println("Identificação: " + rs.getInt(1) + " Tamanho: " + rs.getString(2) + " Baia Limpa: " + rs.getString(3));
+            System.out.println("Baia - ID: " + rs.getInt(1) + " Tamanho: " + rs.getString(2) + " Baia Limpa: " + rs.getString(3));
         } 
             
         } catch (SQLException ex) {
@@ -133,5 +133,50 @@ public class ConBanco {
     
    //FAZER CÓDIGOS AQUI PARA PORCO BAIA IGUAL OS DE CIMA!
    
+    public void inserirPorcoNaBaia(int id,int id_porco, int id_baia){
+        dbConnection();
+        String query = "INSERT INTO porco_na_baia(id, id_porco, id_baia) VALUES (?,?, ?);";
+        
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setInt(1,id);
+            pst.setInt(2, id_porco);
+            pst.setDouble(3, id_baia);
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ConBanco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void deleteFromPorcoDaBaia(int id){
+       
+        dbConnection();
+        String query = "Delete from porco_na_baia WHERE ID = ? ;";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ConBanco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+   }
+    
+    public void readPorcoNaBaia(){
+       
+        dbConnection();
+        String query = "SELECT * FROM porco_na_baia;";
+        try {
+            PreparedStatement pst = connection.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+            
+        while (rs.next()){
+            System.out.println("Porcos: " + rs.getInt(2) + " Baia: " + rs.getInt(3));
+        } 
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ConBanco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+   }
     
 }
